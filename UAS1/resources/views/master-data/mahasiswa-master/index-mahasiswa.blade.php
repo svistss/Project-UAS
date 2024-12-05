@@ -41,7 +41,7 @@
             <table class="min-w-full border border-collapse border-gray-200">
                 <thead>
                     <tr class="bg-gray-100">
-                        <th class="px-4 py-2 text-left text-gray-600 border border-gray-200">ID</th>
+                        <th class="px-4 py-2 text-left text-gray-600 border border-gray-200"></th>
                         <th class="px-4 py-2 text-left text-gray-600 border border-gray-200">NPM</th>
                         <th class="px-4 py-2 text-left text-gray-600 border border-gray-200">Nama</th>
                         <th class="px-4 py-2 text-left text-gray-600 border border-gray-200">Program Studi</th>
@@ -53,8 +53,8 @@
                         <tr class="bg-white">
                         </tr>
                         <tr class="bg-white">
-                            <otd class="px-4 py-2 border border-gray-200">{{ $mahasiswa->npm }}</td>
-                                <td class="px-4 py-2 border border-gray-200 hover:text-blue-500 hover:underline">
+                            <otd class="px-4 py-2 border text-white border-gray-200">{{ $mahasiswa->npm }}</td>
+                                <td class="px-4 py-2 border border-white-200 hover:text-blue-500 hover:underline">
                                     {{-- <a href="{{ route('mahasiswa-detail', $mahasiswa->npm) }}">
                                         {{ $mahasiswa->nama }}
                                     </a> --}}
