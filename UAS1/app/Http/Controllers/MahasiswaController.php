@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Mahasiswa;
+use App\Exports\MahasiswasExport;
+use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class MahasiswaController extends Controller
 {
@@ -12,7 +15,8 @@ class MahasiswaController extends Controller
      */
     public function index()
     {
-        //
+        $mahasiswa = Mahasiswa::all();
+        return view('master-data.mahasiswa-master.index-mahasiswa', compact('mahasiswa'));
     }
 
     /**
@@ -20,7 +24,6 @@ class MahasiswaController extends Controller
      */
     public function create()
     {
-        $mahasiswa = Mahasiswa::all();
         return view('master-data.mahasiswa-master.create-mahasiswa');
     }
 
@@ -28,16 +31,25 @@ class MahasiswaController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-    {
-        $validated = $request->validate([
-            'npm' => 'required|integer|unique:mahasiswas|max:255',
-            'nama' => 'required|string|max:255',
-            'prodi' => 'required|string|max:255',
-        ]);
+{
+    // Log semua data yang diterima dari form
+    Log::info('Data yang diterima dari form:', $request->all());
 
-        Mahasiswa::create($validated);
-        return redirect()->route('mahasiswa-create')->with('success', 'Data mahasiswa berhasil disimpan!');
-    }
+    $validated = $request->validate([
+        'npm' => 'required|integer|unique:mahasiswa|digits_between:1,20',
+        'nama' => 'required|string|max:255',
+        'prodi' => 'required|string|max:255',
+    ]);
+
+    // Log data yang berhasil divalidasi
+    Log::info('Data yang divalidasi:', $validated);
+
+    // Simpan data ke database
+    Mahasiswa::create($validated);
+
+    return redirect()->route('mahasiswa-index')->with('success', 'Data mahasiswa berhasil disimpan!');
+}
+
 
     /**
      * Display the specified resource.
@@ -68,8 +80,13 @@ class MahasiswaController extends Controller
      */
     public function destroy($id)
     {
-        $mahasiswa = Mahasiswa::find($id);
+        $mahasiswa = Mahasiswa::findOrFail($id);
         $mahasiswa->delete();
         return redirect()->route('mahasiswa-index')->with('success', 'Data mahasiswa berhasil dihapus!');
+    }
+
+    public function exportExcel()
+    {
+        return Excel::download(new MahasiswasExport, 'mahasiswa.xlsx');
     }
 }

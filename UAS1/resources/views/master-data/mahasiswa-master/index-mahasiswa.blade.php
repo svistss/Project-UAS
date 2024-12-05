@@ -32,6 +32,12 @@
                     Tambahkan data Mahasiswa
                 </button>
             </a>
+
+            <a href="{{ route('mahasiswa-export-excel') }}"
+                class="px-6 py-4 text-white bg-green-500 border border-green-500 rounded-lg shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-500">
+                Export Data Excel
+            </a>
+
             <table class="min-w-full border border-collapse border-gray-200">
                 <thead>
                     <tr class="bg-gray-100">
@@ -43,15 +49,15 @@
                 </thead>
                 <tbody>
 
-                    @forelse ($mahasiswas as $mahasiswa)
+                    @forelse ($mahasiswa as $mahasiswa)
                         <tr class="bg-white">
                         </tr>
                         <tr class="bg-white">
                             <otd class="px-4 py-2 border border-gray-200">{{ $mahasiswa->npm }}</td>
                                 <td class="px-4 py-2 border border-gray-200 hover:text-blue-500 hover:underline">
-                                    <a href="{{ route('mahasiswa-detail', $mahasiswa->npm) }}">
+                                    {{-- <a href="{{ route('mahasiswa-detail', $mahasiswa->npm) }}">
                                         {{ $mahasiswa->nama }}
-                                    </a>
+                                    </a> --}}
                                 </td>
                                 <td class="px-4 py-2 border border-gray-200">{{ $mahasiswa->id }}</td>
                                 <td class="px-4 py-2 border border-gray-200">{{ $mahasiswa->npm }}</td>
@@ -59,15 +65,23 @@
                                 <td class="px-4 py-2 border border-gray-200">{{ $mahasiswa->prodi }}</td>
                                 </td>
 
-                                <td class="px-4 py-2 border border-gray-200">
-                                    <a href="{{ route('mahasiswa-edit', $mahasiswa->npm) }}"
-                                        class="px-2 text-blue-600 hover:text-blue-800">Edit</a>
-                                    <button class="px-2 text-red-600 hover:text-red-800"
-                                        onclick="confirmDelete('{{ route('mahasiswa-deleted', $mahasiswa->id) }}')">Hapus</button>
+                                <form action="{{ route('mahasiswa-destroy', $mahasiswa->id) }}" method="POST"
+                                    class="inline-block"
+                                    onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="ml-2 text-red-500 hover:underline">
+                                        Hapus
+                                    </button>
+                                </form>
                                 </td>
                         </tr>
                     @empty
-                        <p class="mb-4 text-center text-2xl font-bold text-red-600">Tidak ada data mahasiswa</p>
+                        <tr>
+                            <td colspan="6" class="text-center text-2xl font-bold text-red-600">Data Mahasiswa tidak
+                                ditemukan
+                            </td>
+                        </tr>
                     @endforelse
 
 
@@ -76,39 +90,4 @@
             </table>
         </div>
     </div>
-
-
-    <script>
-        function confirmDelete(deleteUrl) {
-            console.log(deleteUrl);
-            if (confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-                // Jika user mengonfirmasi, kita dapat membuat form dan mengirimkan permintaan delete
-                let form = document.createElement('form');
-                form.method = 'POST';
-                form.action = deleteUrl;
-
-                // Tambahkan CSRF token
-                let csrfInput = document.createElement('input');
-                csrfInput.type = 'hidden';
-                csrfInput.name = '_token';
-                csrfInput.value = '{{ csrf_token() }}';
-                form.appendChild(csrfInput);
-
-                // Tambahkan method spoofing untuk DELETE (karena HTML form hanya mendukung GET dan POST)
-                let methodInput = document.createElement('input');
-                methodInput.type = 'hidden';
-                methodInput.name = '_method';
-                methodInput.value = 'DELETE';
-                form.appendChild(methodInput);
-
-                // Tambahkan form ke body dan submit
-                document.body.appendChild(form);
-                form.submit();
-            }
-        }
-    </script>
-
-
-
-
 </x-app-layout>
