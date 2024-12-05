@@ -59,7 +59,6 @@
                                         {{ $mahasiswa->nama }}
                                     </a> --}}
                                 </td>
-                                <td class="px-4 py-2 border border-gray-200">{{ $mahasiswa->id }}</td>
                                 <td class="px-4 py-2 border border-gray-200">{{ $mahasiswa->npm }}</td>
                                 <td class="px-4 py-2 border border-gray-200">{{ $mahasiswa->nama }}</td>
                                 <td class="px-4 py-2 border border-gray-200">{{ $mahasiswa->prodi }}</td>
@@ -70,7 +69,8 @@
                                     onsubmit="return confirm('Apakah Anda yakin ingin menghapus data ini?')">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="ml-2 text-red-500 hover:underline">
+                                    <button type="submit"
+                                        class="px-6 py-4 text-white bg-red-500 border border-red-500 rounded-lg shadow-lg hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-green-500">
                                         Hapus
                                     </button>
                                 </form>
